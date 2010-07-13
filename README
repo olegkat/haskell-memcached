@@ -1,0 +1,4 @@
+Haskell Bindings For Memcached
+==============================
+
+This package provides Haskell binding for Memcached.
