@@ -1,0 +1,21 @@
+name:                memcached
+version:             0.1.2
+stability:           Alpha
+synopsis:            haskell bindings for memcached
+description:         haskell bindings for memcached
+category:            Network
+license:             OtherLicense
+license-file:        LICENSE
+author:              Evan Martin <martine@danga.com>
+maintainer:          Alson Kemp <alson@alsonkemp.com>
+homepage:            http://neugierig.org/software/darcs/browse/?r=haskell-memcached;a=summary
+
+build-depends:       base>3 && <5, network
+build-type:          Simple
+extra-source-files:  Test.hs, Demo.lhs
+tested-with:         GHC==6.8.2, GHC==6.10
+
+exposed-modules:     Network.Memcache, Network.Memcache.Protocol, Network.Memcache.Serializable,
+                     Network.Memcache.ServerPool, Network.Memcache.Key
+
+ghc-prof-options:    -prof -auto-all
