@@ -1,4 +1,9 @@
 2010-07-14  oleg <oleg@janrain.com>
+	* NEWS:  Updated.
+	* memcached.cabal:  Updated version, maintainer and
+	extra-source-files, fixed build-depends.
+
+2010-07-14  oleg <oleg@janrain.com>
 	* Network/Memcache/Serializable.hs (Serializable):  Support
 	ByteString.  Serialize all types to ByteString instead of String.
 	Encode/decode strings to/from UTF8.
