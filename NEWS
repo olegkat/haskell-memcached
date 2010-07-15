@@ -1,4 +1,4 @@
-0.2 (July ?, 2010)
+0.2 (July 15, 2010)
 
 * Store strings as UTF8-encoded ByteStrings, to avoid garbling
   Unicode strings.
