@@ -8,6 +8,7 @@ license:             OtherLicense
 license-file:        LICENSE
 author:              Evan Martin <martine@danga.com>
 maintainer:          Janrain <hackage@janrain.com>
+homepage:            http://github.com/olegkat/haskell-memcached
 build-type:          Simple
 
 tested-with:         GHC==6.8.2, GHC==6.10
