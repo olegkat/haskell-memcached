@@ -8,14 +8,27 @@ license:             OtherLicense
 license-file:        LICENSE
 author:              Evan Martin <martine@danga.com>
 maintainer:          Janrain <hackage@janrain.com>
-homepage:            http://neugierig.org/software/darcs/browse/?r=haskell-memcached;a=summary
-
-build-depends:       base>3 && <5, network, bytestring >=0.9 && <0.10, utf8-light>=0.4 && <1.0
 build-type:          Simple
-extra-source-files:  Test.hs, Demo.lhs, ChangeLog, NEWS
+
 tested-with:         GHC==6.8.2, GHC==6.10
 
-exposed-modules:     Network.Memcache, Network.Memcache.Protocol, Network.Memcache.Serializable,
-                     Network.Memcache.ServerPool, Network.Memcache.Key
+build-depends:
+  base >3 && <5,
+  network,
+  bytestring >=0.9 && <0.10,
+  utf8-light >=0.4 && <1.0
+
+extra-source-files:
+  Test.hs,
+  Demo.lhs,
+  ChangeLog,
+  NEWS
+
+exposed-modules:
+  Network.Memcache,
+  Network.Memcache.Protocol,
+  Network.Memcache.Serializable,
+  Network.Memcache.ServerPool,
+  Network.Memcache.Key
 
 ghc-prof-options:    -prof -auto-all
