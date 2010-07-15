@@ -15,6 +15,8 @@ import qualified Network
 import Network.Memcache.Key
 import Network.Memcache.Serializable
 import System.IO
+import qualified Data.ByteString as B
+import Data.ByteString (ByteString)
 
 -- | Gather results from action until condition is true.
 ioUntil :: (a -> Bool) -> IO a -> IO [a]
@@ -28,12 +30,13 @@ ioUntil stop io = do
 hPutNetLn :: Handle -> String -> IO ()
 hPutNetLn h str = hPutStr h (str ++ "\r\n")
 
+-- | Put out a line with \r\n terminator.
+hBSPutNetLn :: Handle -> ByteString -> IO ()
+hBSPutNetLn h str = B.hPutStr h str >> hPutStr h "\r\n"
+
 -- | Get a line, stripping \r\n terminator.
 hGetNetLn :: Handle -> IO [Char]
-hGetNetLn h = do
-  str <- ioUntil (== '\r') (hGetChar h)
-  hGetChar h   -- read following newline
-  return str
+hGetNetLn h = fmap init (hGetLine h) -- init gets rid of \r
 
 -- | Put out a command (words with terminator) and flush.
 hPutCommand :: Handle -> [String] -> IO ()
@@ -65,22 +68,22 @@ store :: (Key k, Serializable s) => String -> Server -> k -> s -> IO Bool
 store action (Server handle) key val = do
   let flags = (0::Int)
   let exptime = (0::Int)
-  let valstr = toString val
-  let bytes = length valstr
+  let valstr = serialize val
+  let bytes = B.length valstr
   let cmd = unwords [action, toKey key, show flags, show exptime, show bytes]
   hPutNetLn handle cmd
-  hPutNetLn handle valstr
+  hBSPutNetLn handle valstr
   hFlush handle
   response <- hGetNetLn handle
   return (response == "STORED")
 
-getOneValue :: Handle -> IO (Maybe String)
+getOneValue :: Handle -> IO (Maybe ByteString)
 getOneValue handle = do
   s <- hGetNetLn handle
   case words s of
     ["VALUE", _, _, sbytes] -> do
       let count = read sbytes
-      val <- sequence $ take count (repeat $ hGetChar handle)
+      val <- B.hGet handle count
       return $ Just val
     _ -> return Nothing
 
@@ -106,7 +109,7 @@ instance Memcache Server where
       Just val -> do
         hGetNetLn handle
         hGetNetLn handle
-        return $ fromString val
+        return $ deserialize val
 
   delete (Server handle) key delta = do
     hPutCommand handle [toKey key, show delta]

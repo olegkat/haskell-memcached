@@ -10,7 +10,7 @@ author:              Evan Martin <martine@danga.com>
 maintainer:          Alson Kemp <alson@alsonkemp.com>
 homepage:            http://neugierig.org/software/darcs/browse/?r=haskell-memcached;a=summary
 
-build-depends:       base>3 && <5, network
+build-depends:       base>3 && <5, network, bytestring==0.9.*, utf8-light>=0.4 && <1.0
 build-type:          Simple
 extra-source-files:  Test.hs, Demo.lhs
 tested-with:         GHC==6.8.2, GHC==6.10

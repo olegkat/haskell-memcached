@@ -59,8 +59,8 @@ For this simple type we can stringify it as just "username fontsize".
 For more complicated data, you can do whatever crazy bitpacking necessary.
 
 > instance Serializable User where
->   toString (User username fontsize) = username ++ " " ++ (show fontsize)
->   fromString str = case words str of
+>   serialize (User username fontsize) = username ++ " " ++ (show fontsize)
+>   deserialize str = case words str of
 >                      (a:b:[]) -> Just (User a (read b))
 >                      _        -> Nothing
 
