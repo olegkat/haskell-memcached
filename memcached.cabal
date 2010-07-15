@@ -19,6 +19,7 @@ build-depends:
   utf8-light >=0.4 && <1.0
 
 extra-source-files:
+  Setup.hs,
   Test.hs,
   Demo.lhs,
   ChangeLog,
