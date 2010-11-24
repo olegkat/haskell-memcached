@@ -112,7 +112,7 @@ instance Memcache Server where
         return $ deserialize val
 
   delete (Server handle) key delta = do
-    hPutCommand handle [toKey key, show delta]
+    hPutCommand handle ["delete", toKey key, show delta]
     response <- hGetNetLn handle
     return (response == "DELETED")
 
