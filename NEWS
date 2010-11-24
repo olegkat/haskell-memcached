@@ -1,3 +1,8 @@
+0.2.1 (November 24, 2010)
+
+* Fixed the "delete" command.
+
+
 0.2 (July 15, 2010)
 
 * Store strings as UTF8-encoded ByteStrings, to avoid garbling
