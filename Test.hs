@@ -31,6 +31,18 @@ setGetTest = TestCase $ withServerConnection $ \server -> do
     Nothing -> assertFailure "'foo' not found just after setting it"
     Just v  -> assertEqual "foo value" (3 :: Int) v
 
+deleteTest :: Test
+deleteTest = TestCase $ withServerConnection $ \server -> do
+  let foo = 3 :: Int
+  success <- Network.Memcache.set server "foo2" foo
+  success' <- Network.Memcache.delete server "foo2"
+  foo' <- Network.Memcache.get server "foo2"
+  if (not success')
+    then assertFailure "delete did not succeed"
+    else case foo' of
+    Nothing -> do return ()
+    Just v  -> assertEqual "foo value" (3 :: Int) v
+
 hashTest :: Test
 hashTest = TestCase $ do
   assertBool "hash produces different values" (hash key1 /= hash key2)
@@ -46,6 +58,6 @@ main = bracket upDaemon downDaemon runTests >> return () where
                   sleep 200  -- give it time to start up and bind.
                   return m
   downDaemon = terminateProcess
-  runTests _ = runTestTT $ TestList [statsTest, setGetTest, hashTest]
+  runTests _ = runTestTT $ TestList [statsTest, setGetTest, hashTest, deleteTest]
 
 -- vim: set ts=2 sw=2 et :
