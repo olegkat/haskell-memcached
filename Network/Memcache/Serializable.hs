@@ -3,8 +3,10 @@
 
 module Network.Memcache.Serializable(Serializable, serialize, deserialize) where
 
+import Prelude hiding (head)
 import Data.ByteString (ByteString)
-import Codec.Binary.UTF8.Light (encode, decode)
+import Data.Text hiding (map)
+import Data.Text.Encoding
 
 -- It'd be nice to use "show" for serialization, but when we
 -- serialize a String we want to serialize it without the quotes.
@@ -30,15 +32,12 @@ class Serializable a where
 instance Serializable Char where
   -- people will rarely want to serialize a single char,
   -- but we define them for completeness.
-  serialize   x      = encode [x]
-  deserialize s      =
-      case decode s of
-          (c:[]) -> Just c
-          _ -> Nothing
+  serialize   x      = encodeUtf8 $ singleton x
+  deserialize s      = Just $ head $ decodeUtf8 s
 
   -- the real use is for serializing strings.
-  serializeL   = encode
-  deserializeL = decode
+  serializeL   = encodeUtf8 . pack
+  deserializeL = unpack . decodeUtf8
 
 instance Serializable ByteString where
     serialize   = id
@@ -46,8 +45,8 @@ instance Serializable ByteString where
 
 -- ...do I really need to copy everything instance of Show?
 instance Serializable Int where
-  serialize   = encode . show
-  deserialize = Just . read . decode
+  serialize   = serializeL . show
+  deserialize = Just . read . unpack . decodeUtf8
 
 instance (Serializable a) => Serializable [a] where
   serialize   = serializeL
